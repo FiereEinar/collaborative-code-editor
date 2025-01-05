@@ -1,8 +1,13 @@
 import express from 'express';
-import { handleFileExecution } from '../controllers/fileController';
+import {
+	createFile,
+	handleFileExecution,
+} from '../controllers/file.controllers';
 
 const router = express.Router();
 
-router.post('/', handleFileExecution);
+router.post('/execute', handleFileExecution);
+
+router.post('/', createFile);
 
 export default router;

@@ -5,6 +5,7 @@ export interface UserDocument extends mongoose.Document {
 	password: string;
 	createdAt: Date;
 	updatedAt: Date;
+	omitPassword(): Omit<UserDocument, 'password'>;
 }
 
 const UserSchema = new mongoose.Schema<UserDocument>(
@@ -15,4 +16,12 @@ const UserSchema = new mongoose.Schema<UserDocument>(
 	{ timestamps: true }
 );
 
-export default mongoose.model<UserDocument>('User', UserSchema);
+UserSchema.methods.omitPassword = function () {
+	const userCopy = this.toObject();
+	delete userCopy.password;
+	return userCopy;
+};
+
+const UserModel = mongoose.model<UserDocument>('User', UserSchema);
+
+export default UserModel;

@@ -3,10 +3,12 @@ import cors, { CorsOptions } from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { PORT } from './constants/env';
+import { NODE_ENV, PORT } from './constants/env';
 import { errorHandler } from './middleware/errorHandler';
 
 import fileRouter from './routers/file.router';
+import authRouter from './routers/auth.router';
+import { connectToDatabase } from './database/mongoose';
 
 const corsOpts: CorsOptions = {
 	origin: 'http://localhost:5173',
@@ -24,11 +26,13 @@ app.get('/', (req, res) => {
 });
 
 app.use('/file', fileRouter);
+app.use('/auth', authRouter);
 
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-	console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(PORT, async () => {
+	console.log(`Server is running on http://localhost:${PORT} in ${NODE_ENV}`);
+	await connectToDatabase();
 });
 
 export default app;
