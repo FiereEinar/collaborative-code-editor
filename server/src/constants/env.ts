@@ -11,3 +11,4 @@ const getEnv = (key: string, defaultValue?: string): string => {
 
 export const PORT = getEnv('PORT', '3000');
 export const NODE_ENV = getEnv('NODE_ENV', 'development');
+export const JUDGE_API = getEnv('JUDGE_API');
