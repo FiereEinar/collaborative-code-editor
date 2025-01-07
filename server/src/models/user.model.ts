@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { SessionDocument } from '../services/session.model';
+import { SessionDocument } from './session.model';
 
 export interface UserDocument extends mongoose.Document {
 	_id: mongoose.Types.ObjectId;
@@ -7,7 +7,7 @@ export interface UserDocument extends mongoose.Document {
 	password: string;
 	createdAt: Date;
 	updatedAt: Date;
-	session: SessionDocument;
+	session: mongoose.Types.ObjectId | SessionDocument;
 	omitPassword(): Omit<UserDocument, 'password'>;
 }
 

@@ -4,7 +4,7 @@ import UserModel from '../models/user.model';
 import { thirtyDaysFromNow } from '../utils/date';
 import { refreshTokenOptions, signToken } from '../utils/jwt';
 import { LoginBody, SignupBody } from '../utils/schemas/auth.schema';
-import SessionModel from './session.model';
+import SessionModel from '../models/session.model';
 
 export const createUser = async (data: SignupBody) => {
 	const existingUser = await UserModel.findOne({ email: data.email }).exec();
@@ -40,7 +40,7 @@ export const loginUser = async (data: LoginBody) => {
 
 	return {
 		user: user.omitPassword(),
-		accessToken: accessToken,
-		refreshToken: refreshToken,
+		accessToken,
+		refreshToken,
 	};
 };

@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
+import { UserDocument } from './user.model';
 
 export interface SessionDocument extends mongoose.Document {
 	_id: mongoose.Types.ObjectId;
-	userID: mongoose.Types.ObjectId;
+	userID: mongoose.Types.ObjectId | UserDocument;
 	createdAt: Date;
 	updatedAt: Date;
 	expiresAt: Date;
@@ -16,6 +17,6 @@ const SessionSchema = new mongoose.Schema<SessionDocument>(
 	{ timestamps: true }
 );
 
-const SessionModel = mongoose.model('Session', SessionSchema);
+const SessionModel = mongoose.model<SessionDocument>('Session', SessionSchema);
 
 export default SessionModel;

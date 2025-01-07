@@ -12,6 +12,7 @@ import authRouter from './routers/auth.router';
 
 import { connectToDatabase } from './database/mongoose';
 import { authenticate } from './middleware/authentication';
+import { notFoundHandler } from './middleware/notFound';
 
 const corsOpts: CorsOptions = {
 	origin: 'http://localhost:5173',
@@ -30,9 +31,10 @@ app.get('/', (req, res) => {
 });
 
 app.use('/auth', authRouter);
-app.use(authenticate);
+// app.use(authenticate);
 app.use('/file', fileRouter);
 
+app.use(notFoundHandler);
 app.use(errorHandler);
 
 app.listen(PORT, async () => {

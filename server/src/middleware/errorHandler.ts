@@ -36,5 +36,7 @@ export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
 		return;
 	}
 
-	res.status(INTERNAL_SERVER_ERROR).send('Internal server error');
+	res
+		.status(INTERNAL_SERVER_ERROR)
+		.json({ message: 'Internal server error', error });
 };

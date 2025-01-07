@@ -6,15 +6,19 @@ export interface FileDocument extends mongoose.Document {
 	content: string;
 	createdAt: Date;
 	updatedAt: Date;
-	owner: UserDocument;
-	partners: UserDocument[];
+	owner: mongoose.Types.ObjectId | UserDocument;
+	partners: (mongoose.Types.ObjectId | UserDocument)[];
 }
 
 const FileSchema = new mongoose.Schema<FileDocument>(
 	{
 		filename: { type: String, required: true },
 		content: { type: String, required: true },
-		owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+		owner: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'User',
+			required: true,
+		},
 		partners: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 	},
 	{ timestamps: true }

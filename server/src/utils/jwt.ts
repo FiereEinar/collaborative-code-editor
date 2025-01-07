@@ -1,6 +1,6 @@
 import jwt, { SignOptions, VerifyOptions } from 'jsonwebtoken';
 import { JWT_REFRESH_KEY, JWT_SECRET_KEY } from '../constants/env';
-import { SessionDocument } from '../services/session.model';
+import { SessionDocument } from '../models/session.model';
 import { UserDocument } from '../models/user.model';
 
 export type AccessTokenPayload = {
