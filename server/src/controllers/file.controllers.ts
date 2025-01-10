@@ -32,3 +32,7 @@ export const createFile = asyncHandler(async (req, res) => {
 
 	res.status(OK).json({ message: 'success', data: request });
 });
+
+export const getUserFiles = asyncHandler(async (req, res) => {
+	res.status(OK).json({ message: 'done' });
+});

@@ -1,15 +1,20 @@
 import Editor from '@monaco-editor/react';
 import { Button } from './components/ui/button';
-import { api } from './api/axios';
+import api from '@/api/axios';
 import { useEffect, useState } from 'react';
 import { languages } from './constants/languages';
 import Sidebar from './components/Sidebar';
 import OutputTerminal from './components/OutputTerminal';
-import { outputSchema } from './lib/validations/outputSchema';
+import { outputSchema } from './lib/validations/output.schema';
 import { z } from 'zod';
 import { socket } from './socket';
+import { useNavigate } from 'react-router-dom';
+import { setNavigate } from './lib/navigate';
 
 function App() {
+	const navigate = useNavigate();
+	setNavigate(navigate);
+
 	const [data, setData] = useState<string>('');
 	const [output, setOutput] = useState<z.infer<typeof outputSchema>>();
 	const [filename, setFilename] = useState('app.js');

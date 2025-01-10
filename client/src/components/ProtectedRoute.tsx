@@ -1,4 +1,4 @@
-import { api } from '@/api/axios';
+import api from '@/api/axios';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,7 +20,7 @@ export default function ProtectedRoute({ children }: PropsWithChildren) {
 
 	if (!isAuthenticated) {
 		return (
-			<div className='flex justify-center items-center text-lg font-semibold'>
+			<div className='bg-vscode flex justify-center items-center text-lg font-semibold h-dvh text-white'>
 				<p>Authenticating...</p>
 			</div>
 		);

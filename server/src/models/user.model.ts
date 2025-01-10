@@ -7,7 +7,6 @@ export interface UserDocument extends mongoose.Document {
 	password: string;
 	createdAt: Date;
 	updatedAt: Date;
-	session: mongoose.Types.ObjectId | SessionDocument;
 	omitPassword(): Omit<UserDocument, 'password'>;
 }
 
@@ -15,11 +14,6 @@ const UserSchema = new mongoose.Schema<UserDocument>(
 	{
 		email: { type: String, required: true },
 		password: { type: String, required: true },
-		session: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Session',
-			index: true,
-		},
 	},
 	{ timestamps: true }
 );

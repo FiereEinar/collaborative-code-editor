@@ -20,11 +20,11 @@ export const signupHandler = asyncHandler(async (req, res) => {
 export const loginHandler = asyncHandler(async (req, res) => {
 	const request = loginSchema.parse(req.body);
 
-	const { accessToken, refreshToken } = await loginUser(request);
+	const { user, accessToken, refreshToken } = await loginUser(request);
 
 	setAuthCookies(res, accessToken, refreshToken);
 
-	res.status(OK).json({ message: 'Login successfull' });
+	res.status(OK).json({ message: 'Login successfull', user });
 });
 
 export const authCheckHandler = asyncHandler(async (req, res) => {

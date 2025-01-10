@@ -1,17 +1,15 @@
 import express from 'express';
 import {
 	createFile,
+	getUserFiles,
 	handleFileExecution,
 } from '../controllers/file.controllers';
-import { OK } from '../constants/http';
 import { authenticate } from '../middleware/authentication';
 
 const router = express.Router();
 
 router.post('/execute', authenticate, handleFileExecution);
 router.post('/', authenticate, createFile);
-router.get('/test', (req, res) => {
-	res.status(OK).json({ message: 'Success' });
-});
+router.get('/', getUserFiles);
 
 export default router;

@@ -1,4 +1,4 @@
-import { outputSchema } from '@/lib/validations/outputSchema';
+import { outputSchema } from '@/lib/validations/output.schema';
 import { z } from 'zod';
 
 type OutputTerminalProps = {

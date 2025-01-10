@@ -26,9 +26,15 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('join_room', (data) => {
+		// leave the previous room for this socket
 		socket.leave(userPreviousRooms[socket.id]);
+		// join the project
 		socket.join(data.project);
+		// record the project
 		userPreviousRooms[socket.id] = data.project;
+
+		// io.to(data.project).emit('someone_joined');
+
 		console.log(`User ${data.userID} joined the room ${data.project}`);
 	});
 
