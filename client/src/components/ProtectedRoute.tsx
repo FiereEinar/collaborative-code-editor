@@ -12,6 +12,7 @@ export default function ProtectedRoute({ children }: PropsWithChildren) {
 				await api.get('/auth/token/check');
 				setIsAuthenticated(true);
 			} catch (err) {
+				console.log(err);
 				navigate('/login');
 				setIsAuthenticated(false);
 			}

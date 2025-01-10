@@ -3,7 +3,7 @@ import { UserDocument } from './user.model';
 
 export interface SessionDocument extends mongoose.Document {
 	_id: mongoose.Types.ObjectId;
-	userID: mongoose.Types.ObjectId | UserDocument;
+	userID: mongoose.Types.ObjectId;
 	createdAt: Date;
 	updatedAt: Date;
 	expiresAt: Date;

@@ -1,6 +1,7 @@
 import { fetchUserFiles } from '@/api/file.api';
 import { QUERY_KEYS } from '@/constants';
 import { useQuery } from '@tanstack/react-query';
+import ErrorText from './ui/error';
 
 export default function ProjectList() {
 	const {
@@ -12,7 +13,19 @@ export default function ProjectList() {
 		queryFn: fetchUserFiles,
 	});
 
-	console.log('files: ', files);
+	if (isLoading) {
+		<section>
+			<p className='text-xs text-muted-foreground italic'>Loading files...</p>
+		</section>;
+	}
+
+	if (error) {
+		return (
+			<section>
+				<ErrorText>Failed to load files</ErrorText>
+			</section>
+		);
+	}
 
 	return (
 		<section>
