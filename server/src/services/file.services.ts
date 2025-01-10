@@ -1,5 +1,7 @@
 import { BAD_REQUEST } from '../constants/http';
 import AppError from '../errors/appError';
+import FileModel from '../models/file.model';
+import { CreateFileRequest } from '../types/file';
 import { judgeApi } from '../utils/axios';
 
 export const getExecutionToken = async (

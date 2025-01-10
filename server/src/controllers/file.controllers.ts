@@ -8,6 +8,7 @@ import {
 import { languagesID } from '../constants/languages';
 import path from 'path';
 import { createFileSchema } from '../utils/schemas/file.schema';
+import FileModel from '../models/file.model';
 
 export const handleFileExecution = asyncHandler(async (req, res) => {
 	const { filename, content } = req.body;
@@ -27,12 +28,23 @@ export const handleFileExecution = asyncHandler(async (req, res) => {
 	res.status(OK).json({ output: output });
 });
 
-export const createFile = asyncHandler(async (req, res) => {
+export const createFileHandler = asyncHandler(async (req, res) => {
+	const userID = req.userID;
 	const request = createFileSchema.parse(req.body);
 
-	res.status(OK).json({ message: 'success', data: request });
+	const file = await FileModel.create({
+		...request,
+		owner: userID,
+		content: '',
+	});
+
+	res.status(OK).json({ message: 'success', file });
 });
 
 export const getUserFiles = asyncHandler(async (req, res) => {
-	res.status(OK).json({ message: 'done' });
+	const userID = req.userID;
+
+	const userFiles = await FileModel.find({ owner: userID }).exec();
+
+	res.status(OK).json({ files: userFiles });
 });

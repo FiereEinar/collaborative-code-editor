@@ -1,4 +1,4 @@
-export type Project = {
+export type File = {
 	_id: string;
 	filename: string;
 	content: string;

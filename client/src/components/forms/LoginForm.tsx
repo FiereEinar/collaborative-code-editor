@@ -27,10 +27,7 @@ export default function LoginForm() {
 		try {
 			const { data } = await api.post('/auth/login', formData);
 
-			console.log('Login result: ', data);
 			const parsedUser = userSchema.parse(data.user);
-
-			console.log('parsed user: ', parsedUser);
 			setUser(parsedUser as unknown as User);
 			navigate('/');
 		} catch (error: any) {

@@ -20,8 +20,8 @@ export default function InputField<T extends FieldValues>({
 }: InputFieldProps<T>) {
 	return (
 		<div className='space-y-1 text-muted-foreground'>
-			<Label>{label}</Label>
-			<Input {...register(name)} type={type} />
+			<Label htmlFor={name}>{label}</Label>
+			<Input id={name} {...register(name)} type={type} />
 			{error && <ErrorText>{error}</ErrorText>}
 		</div>
 	);
