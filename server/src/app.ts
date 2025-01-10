@@ -11,10 +11,9 @@ import fileRouter from './routers/file.router';
 import authRouter from './routers/auth.router';
 
 import { connectToDatabase } from './database/mongoose';
-import { authenticate } from './middleware/authentication';
 import { notFoundHandler } from './middleware/notFound';
 
-const corsOpts: CorsOptions = {
+export const corsOpts: CorsOptions = {
 	origin: 'http://localhost:5173',
 	credentials: true,
 };
@@ -31,15 +30,14 @@ app.get('/', (req, res) => {
 });
 
 app.use('/auth', authRouter);
-// app.use(authenticate);
 app.use('/file', fileRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-app.listen(PORT, async () => {
-	console.log(`Server is running on http://localhost:${PORT} in ${NODE_ENV}`);
-	await connectToDatabase();
-});
+// app.listen(Number(PORT), '0.0.0.0', async () => {
+// 	console.log(`Server is running on http://localhost:${PORT} in ${NODE_ENV}`);
+// 	await connectToDatabase();
+// });
 
 export default app;

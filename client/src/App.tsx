@@ -7,6 +7,7 @@ import Sidebar from './components/Sidebar';
 import OutputTerminal from './components/OutputTerminal';
 import { outputSchema } from './lib/validations/outputSchema';
 import { z } from 'zod';
+import { socket } from './socket';
 
 function App() {
 	const [data, setData] = useState<string>('console.log("Hello World");');
@@ -18,6 +19,7 @@ function App() {
 
 	const onChange = (value: string | undefined) => {
 		if (value) setData(value);
+		socket.emit('typing', { content: value });
 	};
 
 	const handleSubmit = async () => {
