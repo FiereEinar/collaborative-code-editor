@@ -31,13 +31,21 @@ function App() {
 		setData(data.content);
 	});
 
+	// socket.on('someone_joined', () => {
+	// 	socket.emit('typing', {
+	// 		content: data,
+	// 		project: filename,
+	// 		userID: '677a3747bad4adf7eaa975e3',
+	// 	});
+	// })
+
 	useEffect(() => {
 		socket.emit('join_room', {
 			content: '',
 			project: filename,
 			userID: '677a3747bad4adf7eaa975e3',
 		});
-	}, []);
+	}, [filename]);
 
 	const handleSubmit = async () => {
 		try {
@@ -58,7 +66,15 @@ function App() {
 				<Sidebar />
 				<div className='w-full overflow-hidden'>
 					<div className='bg-vscode p-2 text-white border-b flex justify-between items-center'>
-						<p>{filename}</p>
+						<div className='flex gap-2'>
+							<p>{filename}</p>
+							<input
+								className='bg-vscode'
+								onChange={(e) => setFilename(e.target.value)}
+								type='text'
+								value={filename}
+							/>
+						</div>
 						<Button onClick={handleSubmit} size='sm' variant='secondary'>
 							Run
 						</Button>

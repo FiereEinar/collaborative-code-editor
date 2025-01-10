@@ -6,6 +6,8 @@ import { NODE_ENV, PORT } from './constants/env';
 import dotenv from 'dotenv';
 dotenv.config();
 
+const userPreviousRooms: { [key: string]: string } = {};
+
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
 	cors: corsOpts,
@@ -24,7 +26,9 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('join_room', (data) => {
+		socket.leave(userPreviousRooms[socket.id]);
 		socket.join(data.project);
+		userPreviousRooms[socket.id] = data.project;
 		console.log(`User ${data.userID} joined the room ${data.project}`);
 	});
 

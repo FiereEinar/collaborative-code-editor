@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { UserDocument } from './user.model';
 
 export interface FileDocument extends mongoose.Document {
+	_id: mongoose.Types.ObjectId;
 	filename: string;
 	content: string;
 	createdAt: Date;
