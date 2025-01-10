@@ -1,7 +1,7 @@
 import Editor from '@monaco-editor/react';
 import { Button } from './components/ui/button';
 import { api } from './api/axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { languages } from './constants/languages';
 import Sidebar from './components/Sidebar';
 import OutputTerminal from './components/OutputTerminal';
@@ -10,7 +10,7 @@ import { z } from 'zod';
 import { socket } from './socket';
 
 function App() {
-	const [data, setData] = useState<string>('console.log("Hello World");');
+	const [data, setData] = useState<string>('');
 	const [output, setOutput] = useState<z.infer<typeof outputSchema>>();
 	const [filename, setFilename] = useState('app.js');
 
@@ -18,9 +18,26 @@ function App() {
 	const extName = filenameArr[filenameArr.length - 1];
 
 	const onChange = (value: string | undefined) => {
-		if (value) setData(value);
-		socket.emit('typing', { content: value });
+		// if (value) setData(value);
+		socket.emit('typing', {
+			content: value,
+			project: filename,
+			userID: '677a3747bad4adf7eaa975e3',
+		});
 	};
+
+	socket.on('text_update', (data) => {
+		console.log('Received update');
+		setData(data.content);
+	});
+
+	useEffect(() => {
+		socket.emit('join_room', {
+			content: '',
+			project: filename,
+			userID: '677a3747bad4adf7eaa975e3',
+		});
+	}, []);
 
 	const handleSubmit = async () => {
 		try {
@@ -50,7 +67,7 @@ function App() {
 						height='95dvh'
 						defaultLanguage={languages[extName]}
 						theme='vs-dark'
-						defaultValue={data}
+						value={data}
 						onChange={onChange}
 					/>
 				</div>

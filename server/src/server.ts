@@ -19,6 +19,13 @@ io.on('connection', (socket) => {
 	socket.on('typing', (data) => {
 		console.log(`User ${id} is typing...`);
 		console.log(data);
+
+		io.to(data.project).emit('text_update', data);
+	});
+
+	socket.on('join_room', (data) => {
+		socket.join(data.project);
+		console.log(`User ${data.userID} joined the room ${data.project}`);
 	});
 
 	socket.on('disconnect', () => {

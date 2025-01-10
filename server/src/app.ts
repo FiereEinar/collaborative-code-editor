@@ -4,17 +4,15 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 dotenv.config();
 
-import { NODE_ENV, PORT } from './constants/env';
+import { CLIENT_ORIGIN } from './constants/env';
 import { errorHandler } from './middleware/errorHandler';
+import { notFoundHandler } from './middleware/notFound';
 
 import fileRouter from './routers/file.router';
 import authRouter from './routers/auth.router';
 
-import { connectToDatabase } from './database/mongoose';
-import { notFoundHandler } from './middleware/notFound';
-
 export const corsOpts: CorsOptions = {
-	origin: 'http://localhost:5173',
+	origin: CLIENT_ORIGIN,
 	credentials: true,
 };
 
