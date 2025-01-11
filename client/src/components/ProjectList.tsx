@@ -19,18 +19,26 @@ export default function ProjectList() {
 
 	if (isLoading) {
 		return (
-			<p className='text-xs text-muted-foreground italic'>Loading files...</p>
+			<p className='text-xs text-muted-foreground italic px-2'>
+				Loading files...
+			</p>
 		);
 	}
 
 	if (error) {
-		return <ErrorText>Failed to load files</ErrorText>;
+		return (
+			<div className='px-2'>
+				<ErrorText>Failed to load files</ErrorText>
+			</div>
+		);
 	}
 
 	return (
 		<section className='flex flex-col gap-1 justify-start items-start text-muted-foreground'>
 			{!files || files.length === 0 ? (
-				<p className='text-xs text-muted-foreground italic'>No files yet</p>
+				<p className='text-xs text-muted-foreground italic px-2'>
+					No files yet
+				</p>
 			) : (
 				files.map((file) => (
 					<button

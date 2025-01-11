@@ -8,5 +8,5 @@ export const createFileSchema = z.object({
 export const executeFileSchema = z.object({
 	filename: z.string().min(1).max(50),
 	content: z.string().min(1),
-	stdin: z.string().optional(),
+	stdin: z.string().optional().nullable(),
 });

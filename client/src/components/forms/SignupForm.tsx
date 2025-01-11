@@ -1,35 +1,29 @@
-import InputField from '../InputField';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { loginSchema } from '@/lib/validations/auth.schema';
-import { z } from 'zod';
-import { Button } from '../ui/button';
 import api from '@/api/axios';
-import { Link, useNavigate } from 'react-router-dom';
-import { useUserStore } from '../../store/userStore';
-import { userSchema } from '@/lib/validations/user.schema';
-import { User } from '@/types/user';
+import InputField from '../InputField';
 import ErrorText from '../ui/error';
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button } from '../ui/button';
+import { z } from 'zod';
+import { signupSchema } from '@/lib/validations/auth.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-export type LoginFormValues = z.infer<typeof loginSchema>;
+type SignupFormValues = z.infer<typeof signupSchema>;
 
-export default function LoginForm() {
+export default function SignupForm() {
 	const {
 		register,
 		handleSubmit,
 		setError,
 		formState: { errors, isSubmitting },
-	} = useForm<LoginFormValues>({ resolver: zodResolver(loginSchema) });
-	const setUser = useUserStore((state) => state.setUser);
+	} = useForm<SignupFormValues>({ resolver: zodResolver(signupSchema) });
 	const navigate = useNavigate();
 
-	const onSubmit = async (formData: LoginFormValues) => {
+	const onSubmit = async (formData: SignupFormValues) => {
 		try {
-			const { data } = await api.post('/auth/login', formData);
+			await api.post('/auth/signup', formData);
 
-			const parsedUser = userSchema.parse(data.user);
-			setUser(parsedUser as unknown as User);
-			navigate('/');
+			navigate('/login');
 		} catch (error: any) {
 			console.error('Error submitting form', error);
 			setError('root', { message: error.message || error });
@@ -38,6 +32,13 @@ export default function LoginForm() {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2'>
+			<InputField
+				register={register}
+				error={errors.username?.message}
+				name='username'
+				type='username'
+				label='Username:'
+			/>
 			<InputField
 				register={register}
 				error={errors.email?.message}
@@ -52,11 +53,18 @@ export default function LoginForm() {
 				type='password'
 				label='Password:'
 			/>
+			<InputField
+				register={register}
+				error={errors.confirmPassword?.message}
+				name='confirmPassword'
+				type='password'
+				label='Confirm password:'
+			/>
 			<Link
-				to='/signup'
+				to='/login'
 				className='text-xs italic text-muted-foreground underline'
 			>
-				Signup
+				Login
 			</Link>
 			{errors.root?.message && <ErrorText>{errors.root.message}</ErrorText>}
 			<div className='flex justify-end'>

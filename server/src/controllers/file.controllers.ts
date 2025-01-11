@@ -24,7 +24,7 @@ export const fileExecutionHandler = asyncHandler(async (req, res) => {
 	const tokenRequest = await getExecutionToken(
 		content,
 		languagesID[path.extname(filename).replace('.', '')],
-		stdin
+		stdin || undefined
 	);
 
 	appAssert(tokenRequest.token, BAD_REQUEST, 'Error in execution');
