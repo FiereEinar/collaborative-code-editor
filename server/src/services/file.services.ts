@@ -1,6 +1,8 @@
-import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from '../constants/http';
 import AppError from '../errors/appError';
+import FileModel from '../models/file.model';
 import { judgeApi } from '../utils/axios';
+import { CreateFileRequest } from '../types/file';
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from '../constants/http';
 
 export const getExecutionToken = async (
 	sourceCode: string,
@@ -43,4 +45,19 @@ export const getExecutionResult = async (token: string) => {
 	} catch (error) {
 		throw new AppError(INTERNAL_SERVER_ERROR, 'Failed to execute code');
 	}
+};
+
+export const createFile = async (
+	request: CreateFileRequest,
+	userID: string
+) => {
+	return await FileModel.create({
+		...request,
+		owner: userID,
+		content: '',
+	});
+};
+
+export const getUserFiles = async (userID: string) => {
+	return await FileModel.find({ owner: userID }).exec();
 };

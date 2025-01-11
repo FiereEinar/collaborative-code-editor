@@ -1,16 +1,17 @@
+import path from 'path';
 import asyncHandler from 'express-async-handler';
 import appAssert from '../errors/appAssert';
+import { languagesID } from '../constants/languages';
+import { createFileSchema } from '../utils/schemas/file.schema';
 import { BAD_REQUEST, OK } from '../constants/http';
 import {
+	createFile,
 	getExecutionResult,
 	getExecutionToken,
+	getUserFiles,
 } from '../services/file.services';
-import { languagesID } from '../constants/languages';
-import path from 'path';
-import { createFileSchema } from '../utils/schemas/file.schema';
-import FileModel from '../models/file.model';
 
-export const handleFileExecution = asyncHandler(async (req, res) => {
+export const fileExecutionHandler = asyncHandler(async (req, res) => {
 	const { filename, content, stdin } = req.body;
 
 	appAssert(content, BAD_REQUEST, 'Content cannot be empty');
@@ -33,19 +34,15 @@ export const createFileHandler = asyncHandler(async (req, res) => {
 	const userID = req.userID;
 	const request = createFileSchema.parse(req.body);
 
-	const file = await FileModel.create({
-		...request,
-		owner: userID,
-		content: '',
-	});
+	const file = createFile(request, userID.toString());
 
 	res.status(OK).json({ message: 'success', file });
 });
 
-export const getUserFiles = asyncHandler(async (req, res) => {
+export const getUserFilesHandler = asyncHandler(async (req, res) => {
 	const userID = req.userID;
 
-	const userFiles = await FileModel.find({ owner: userID }).exec();
+	const files = await getUserFiles(userID.toString());
 
-	res.status(OK).json({ files: userFiles });
+	res.status(OK).json({ files });
 });

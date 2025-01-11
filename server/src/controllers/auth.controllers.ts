@@ -1,23 +1,19 @@
 import asyncHandler from 'express-async-handler';
+import appAssert from '../errors/appAssert';
 import { loginSchema, signupSchema } from '../utils/schemas/auth.schema';
-import { createUser, loginUser } from '../services/auth.services';
-import { CREATED, FORBIDDEN, OK, UNAUTHORIZED } from '../constants/http';
 import { accessTokenCookieOpts, setAuthCookies } from '../utils/cookie';
+import { CREATED, OK, UNAUTHORIZED } from '../constants/http';
+import {
+	checkAuthentication,
+	createUser,
+	loginUser,
+	refreshAuthentication,
+} from '../services/auth.services';
 import {
 	appAccessCookieName,
 	AppErrorCode,
 	appRefreshCookieName,
 } from '../constants';
-import appAssert from '../errors/appAssert';
-import {
-	refreshTokenOptions,
-	RefreshTokenPayload,
-	signToken,
-	verifyToken,
-} from '../utils/jwt';
-import UserModel from '../models/user.model';
-import SessionModel from '../models/session.model';
-import { ObjectId } from 'mongoose';
 
 export const signupHandler = asyncHandler(async (req, res) => {
 	const request = signupSchema.parse(req.body);
@@ -47,49 +43,17 @@ export const authCheckHandler = asyncHandler(async (req, res) => {
 		AppErrorCode.InvalidAccessToken
 	);
 
-	const { error, payload } = verifyToken(accessToken);
-	appAssert(payload, UNAUTHORIZED, error, AppErrorCode.InvalidAccessToken);
-
-	const user = await UserModel.findById(payload.userID);
-	appAssert(user, UNAUTHORIZED, 'No user', AppErrorCode.InvalidAccessToken);
-
-	const session = await SessionModel.findById(payload.sessionID);
-	appAssert(
-		session,
-		UNAUTHORIZED,
-		'Invalid session',
-		AppErrorCode.InvalidAccessToken
-	);
+	const { user } = await checkAuthentication(accessToken);
 
 	res.status(OK).json(user.omitPassword());
 });
 
 export const refreshHandler = asyncHandler(async (req, res) => {
 	const refreshToken = req.cookies[appRefreshCookieName];
-	console.log('refresh token: ', refreshToken);
+
 	appAssert(refreshToken, UNAUTHORIZED, 'Unauthorized');
-	console.log('refresh hit');
-	const { error, payload } = verifyToken<RefreshTokenPayload>(
-		refreshToken,
-		refreshTokenOptions
-	);
-	appAssert(payload, UNAUTHORIZED, error);
 
-	const session = await SessionModel.findById(payload.sessionID);
-	appAssert(session, UNAUTHORIZED, 'No session found');
-
-	const now = Date.now();
-
-	if (session.expiresAt.getTime() < now) {
-		await session.deleteOne();
-		res.status(UNAUTHORIZED).json({ message: 'Invalid session' });
-		return;
-	}
-
-	const newAccessToken = signToken({
-		sessionID: session._id,
-		userID: session.userID,
-	});
+	const { newAccessToken } = await refreshAuthentication(res, refreshToken);
 
 	res.cookie(appAccessCookieName, newAccessToken, accessTokenCookieOpts());
 

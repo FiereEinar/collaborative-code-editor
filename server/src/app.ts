@@ -33,9 +33,4 @@ app.use('/file', fileRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-// app.listen(Number(PORT), '0.0.0.0', async () => {
-// 	console.log(`Server is running on http://localhost:${PORT} in ${NODE_ENV}`);
-// 	await connectToDatabase();
-// });
-
 export default app;

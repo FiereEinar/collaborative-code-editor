@@ -50,7 +50,7 @@ export default function CodeEditor() {
 					description: 'Error',
 					id: 69,
 				},
-				time: '9999',
+				time: '0',
 				token: '',
 				message: error.message,
 			});
