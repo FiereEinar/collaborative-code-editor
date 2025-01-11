@@ -1,12 +1,8 @@
-import { FileOutput } from '@/types/file';
 import TerminalOutput from './ui/terminal-output';
 import { useCurrentOpenFileStore } from '@/store/useCurrenOpenFileStore';
 
-type OutputTerminalProps = {
-	output?: FileOutput | null;
-};
-
-export default function OutputTerminal({ output }: OutputTerminalProps) {
+export default function OutputTerminal() {
+	const output = useCurrentOpenFileStore((state) => state.output);
 	const { stdin, setInput } = useCurrentOpenFileStore((state) => state);
 
 	return (
