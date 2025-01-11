@@ -18,17 +18,13 @@ export default function ProjectList() {
 	});
 
 	if (isLoading) {
-		<section>
+		return (
 			<p className='text-xs text-muted-foreground italic'>Loading files...</p>
-		</section>;
+		);
 	}
 
 	if (error) {
-		return (
-			<section>
-				<ErrorText>Failed to load files</ErrorText>
-			</section>
-		);
+		return <ErrorText>Failed to load files</ErrorText>;
 	}
 
 	return (

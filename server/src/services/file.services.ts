@@ -4,12 +4,14 @@ import { judgeApi } from '../utils/axios';
 
 export const getExecutionToken = async (
 	sourceCode: string,
-	languageID: number
+	languageID: number,
+	stdin?: string
 ) => {
 	try {
 		const { data } = await judgeApi.post('/submissions/?base64_encoded=false', {
 			source_code: sourceCode,
 			language_id: languageID,
+			stdin: stdin,
 		});
 
 		return data;

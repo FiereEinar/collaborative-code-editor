@@ -1,11 +1,14 @@
 import { FileOutput } from '@/types/file';
 import TerminalOutput from './ui/terminal-output';
+import { useCurrentOpenFileStore } from '@/store/useCurrenOpenFileStore';
 
 type OutputTerminalProps = {
 	output?: FileOutput | null;
 };
 
 export default function OutputTerminal({ output }: OutputTerminalProps) {
+	const { stdin, setInput } = useCurrentOpenFileStore((state) => state);
+
 	return (
 		<section className='bg-vscode flex flex-col text-white  !w-[30rem] border-l h-dvh  overflow-x-hidden'>
 			<div className='flex border-b justify-between items-center p-3'>
@@ -27,6 +30,16 @@ export default function OutputTerminal({ output }: OutputTerminalProps) {
 						<TerminalOutput text={output.stderr} />
 					</>
 				)}
+			</div>
+			<div className='border-t px-4 py-2 text-muted-foreground text-xs flex gap-2 items-center'>
+				<label htmlFor='stdin'>input: </label>
+				<input
+					onChange={(e) => setInput(e.target.value)}
+					value={stdin || ''}
+					className='bg-vscode w-full border rounded-md px-2 py-1'
+					type='text'
+					id='stdin'
+				/>
 			</div>
 			<div className='border-t h-10 bg-vscode w-full text-muted-foreground text-xs flex p-4 items-center justify-between pr-3'>
 				<p>{output?.memory}mb</p>

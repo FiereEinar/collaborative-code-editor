@@ -11,14 +11,15 @@ import { createFileSchema } from '../utils/schemas/file.schema';
 import FileModel from '../models/file.model';
 
 export const handleFileExecution = asyncHandler(async (req, res) => {
-	const { filename, content } = req.body;
+	const { filename, content, stdin } = req.body;
 
 	appAssert(content, BAD_REQUEST, 'Content cannot be empty');
 	appAssert(filename, BAD_REQUEST, 'Filename cannot be empty');
 
 	const tokenRequest = await getExecutionToken(
 		content,
-		languagesID[path.extname(filename).replace('.', '')]
+		languagesID[path.extname(filename).replace('.', '')],
+		stdin
 	);
 
 	appAssert(tokenRequest.token, BAD_REQUEST, 'Error in execution');

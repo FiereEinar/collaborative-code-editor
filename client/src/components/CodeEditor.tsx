@@ -11,7 +11,7 @@ import { useUserStore } from '@/store/userStore';
 export default function CodeEditor() {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const user = useUserStore((state) => state.user);
-	const { file, setFile, setOutput } = useCurrentOpenFileStore(
+	const { file, stdin, setFile, setOutput } = useCurrentOpenFileStore(
 		(state) => state
 	);
 	const debouncedContent = useDebounce(file?.content || '');
@@ -35,6 +35,7 @@ export default function CodeEditor() {
 			const { data: result } = await api.post('/file/execute', {
 				filename: file?.filename,
 				content: file?.content,
+				stdin: stdin,
 			});
 
 			console.log('Output: ', result.output);
