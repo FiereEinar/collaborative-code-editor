@@ -2,7 +2,10 @@ import path from 'path';
 import asyncHandler from 'express-async-handler';
 import appAssert from '../errors/appAssert';
 import { languagesID } from '../constants/languages';
-import { createFileSchema } from '../utils/schemas/file.schema';
+import {
+	createFileSchema,
+	executeFileSchema,
+} from '../utils/schemas/file.schema';
 import { BAD_REQUEST, OK } from '../constants/http';
 import {
 	createFile,
@@ -12,7 +15,8 @@ import {
 } from '../services/file.services';
 
 export const fileExecutionHandler = asyncHandler(async (req, res) => {
-	const { filename, content, stdin } = req.body;
+	const body = executeFileSchema.parse(req.body);
+	const { filename, content, stdin } = body;
 
 	appAssert(content, BAD_REQUEST, 'Content cannot be empty');
 	appAssert(filename, BAD_REQUEST, 'Filename cannot be empty');

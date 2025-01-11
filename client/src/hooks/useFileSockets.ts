@@ -10,7 +10,7 @@ export function useFileSockets() {
 	const debouncedContent = useDebounce(file?.content || '');
 
 	socket.on('text_update', (data) => {
-		if (data.userID === user?._id) return;
+		// if (data.userID === user?._id) return;
 
 		console.log('Received update');
 		if (!file) return;
