@@ -1,7 +1,5 @@
-import { BAD_REQUEST } from '../constants/http';
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from '../constants/http';
 import AppError from '../errors/appError';
-import FileModel from '../models/file.model';
-import { CreateFileRequest } from '../types/file';
 import { judgeApi } from '../utils/axios';
 
 export const getExecutionToken = async (
@@ -17,7 +15,11 @@ export const getExecutionToken = async (
 		return data;
 	} catch (error: any) {
 		console.log(error);
-		throw new AppError(BAD_REQUEST, 'Unsupported language detected');
+		if (error.code === 'ECONNREFUSED') {
+			throw new AppError(INTERNAL_SERVER_ERROR, 'Server compiler error');
+		} else {
+			throw new AppError(BAD_REQUEST, 'Unsupported language detected');
+		}
 	}
 };
 
@@ -34,9 +36,9 @@ export const getExecutionResult = async (token: string) => {
 				return data;
 			}
 
-			setTimeout(() => {}, 1000);
+			await new Promise((resolve) => setTimeout(resolve, 1000));
 		}
 	} catch (error) {
-		throw new AppError(BAD_REQUEST, 'Failed to execute code');
+		throw new AppError(INTERNAL_SERVER_ERROR, 'Failed to execute code');
 	}
 };

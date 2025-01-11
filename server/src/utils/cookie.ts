@@ -11,16 +11,16 @@ export const defaultCookieOpts: CookieOptions = {
 	httpOnly: true,
 };
 
-export const accessTokenCookieOpts: CookieOptions = {
+export const accessTokenCookieOpts = (): CookieOptions => ({
 	...defaultCookieOpts,
 	expires: fifteenMinutesFromNow(),
-};
+});
 
-export const refreshTokenCookieOpts: CookieOptions = {
+export const refreshTokenCookieOpts = (): CookieOptions => ({
 	...defaultCookieOpts,
 	expires: thirtyDaysFromNow(),
 	path: REFRESH_PATH,
-};
+});
 
 export const setAuthCookies = (
 	res: Response,
@@ -28,8 +28,8 @@ export const setAuthCookies = (
 	refreshToken: string
 ) =>
 	res
-		.cookie(appAccessCookieName, accessToken, accessTokenCookieOpts)
-		.cookie(appRefreshCookieName, refreshToken, refreshTokenCookieOpts);
+		.cookie(appAccessCookieName, accessToken, accessTokenCookieOpts())
+		.cookie(appRefreshCookieName, refreshToken, refreshTokenCookieOpts());
 
 export const clearAuthCookies = (res: Response) =>
 	res

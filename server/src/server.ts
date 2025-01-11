@@ -4,6 +4,7 @@ import app, { corsOpts } from './app';
 import { connectToDatabase } from './database/mongoose';
 import { NODE_ENV, PORT } from './constants/env';
 import dotenv from 'dotenv';
+import FileModel from './models/file.model';
 dotenv.config();
 
 const userPreviousRooms: { [key: string]: string } = {};
@@ -18,9 +19,11 @@ io.on('connection', (socket) => {
 
 	console.log('A user connected with id: ', id);
 
-	socket.on('typing', (data) => {
+	socket.on('typing', async (data) => {
 		console.log(`User ${id} is typing...`);
 		console.log(data);
+
+		await FileModel.findByIdAndUpdate(data.fileID, { content: data.content });
 
 		io.to(data.project).emit('text_update', data);
 	});
@@ -36,6 +39,11 @@ io.on('connection', (socket) => {
 		// io.to(data.project).emit('someone_joined');
 
 		console.log(`User ${data.userID} joined the room ${data.project}`);
+	});
+
+	socket.on('exit_room', () => {
+		socket.leave(userPreviousRooms[socket.id]);
+		userPreviousRooms[socket.id] = '';
 	});
 
 	socket.on('disconnect', () => {

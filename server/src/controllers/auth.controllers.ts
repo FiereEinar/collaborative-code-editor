@@ -91,7 +91,7 @@ export const refreshHandler = asyncHandler(async (req, res) => {
 		userID: session.userID,
 	});
 
-	res.cookie(appAccessCookieName, newAccessToken, accessTokenCookieOpts);
+	res.cookie(appAccessCookieName, newAccessToken, accessTokenCookieOpts());
 
 	res.status(OK).json({ message: 'Refreshed' });
 });
